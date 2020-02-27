@@ -31,21 +31,23 @@ module.exports = function toReadable (number) {
     100: "hundred"
   }
 
-  // let edinici = '';
-  // if (number%10) {
-  const edinici = number%10;
-  // }
-  const desyatki = Math.floor(number/10) * 10;
-  const sotni = Math.floor(number/100);
-  
-  // console.log(desyatki);
-  if (number <= 20) {
-    return nameOfNumber[number];
-  } else if (number > 20 && number < 100) {
-    return nameOfNumber[desyatki] + ' ' + nameOfNumber[edinici];
-  } else if (number >= 100) {
-    return nameOfNumber[sotni] + ' ' + nameOfNumber[100] + ' ' + nameOfNumber[Math.floor((number%100)/10) * 10] + ' ' + nameOfNumber[edinici];
-  }
-}
+  let edinici = number%10;
+  let desyatki = Math.floor((number/10)%10) * 10;
+  let sotni = Math.floor((number/100)%10);
+  let result = "zero";
 
-// console.log(toReadable (720));
+  if (number%100 <= 20 && number%100 > 0) {
+    result = nameOfNumber[sotni] + ' ' + nameOfNumber[100] + ' ' + nameOfNumber[number%100];
+  } else if (number !== 0) {
+    result = nameOfNumber[sotni] + ' ' + nameOfNumber[100] + ' ' + nameOfNumber[desyatki] + ' ' + nameOfNumber[edinici];
+  }
+
+  if (number < 100 && number > 0) {
+    if (number <= 20) {
+      result = nameOfNumber[number];
+    } else {
+      result = nameOfNumber[desyatki] + ' ' + nameOfNumber[edinici];
+    }
+  }
+  return result.trim();
+}
